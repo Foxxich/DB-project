@@ -115,7 +115,7 @@ public class DataBaseSQL implements DataAccessObject
         ) {
             statement.setString(1, towar.getName());
             statement.setString(2, towar.getEan());
-            statement.setString(3, towar.getProducent());
+            statement.setString(3, towar.getProducer());
             statement.setString(4, towar.getWarranty());
             statement.setInt(5, towar.getAvailability());
             statement.execute();
@@ -182,7 +182,7 @@ public class DataBaseSQL implements DataAccessObject
             statement.setInt(1, towar.getItemId());
             statement.setString(2, towar.getName());
             statement.setString(3, towar.getEan());
-            statement.setString(4, towar.getProducent());
+            statement.setString(4, towar.getProducer());
             statement.setString(5, towar.getWarranty());
             statement.setInt(6, towar.getAvailability());
             statement.executeUpdate();
