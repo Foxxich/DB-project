@@ -10,7 +10,7 @@ public class Zamowienie implements DataBaseObject {
     private String time;
 
     private List<ElementZamowienia> elements;
-    
+
     public Zamowienie(int invoiceID, String time, String state,int clientID) {
         this.clientID = clientID;
         this.invoiceID = invoiceID;

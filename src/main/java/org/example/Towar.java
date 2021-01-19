@@ -5,7 +5,7 @@ public class Towar implements DataBaseObject {
 
     private String ean;
     private String name;
-    private String producent;
+    private String producer;
     private String warranty;
     private int itemId;
     private int availability;
@@ -14,7 +14,7 @@ public class Towar implements DataBaseObject {
         this.itemId = itemId;
         this.name = name;
         this.ean = ean;
-        this.producent = producer;
+        this.producer = producer;
         this.warranty = warranty;
         this.availability = availability;
     }
@@ -31,8 +31,8 @@ public class Towar implements DataBaseObject {
         return ean;
     }
 
-    public String getProducent() {
-        return producent;
+    public String getProducer() {
+        return producer;
     }
 
     public String getWarranty() {
@@ -46,11 +46,25 @@ public class Towar implements DataBaseObject {
 
     @Override
     public Object[] getAsObject() {
-        return new Object[0];
+        return new Object[] {
+                this.itemId,
+                this.name,
+                this.ean,
+                this.producer,
+                this.warranty,
+                this.availability
+        };
     }
 
     @Override
     public String[] getHeaders() {
-        return new String[0];
+        return new String[] {
+                "ItemID",
+                "Name",
+                "EAN",
+                "Producer",
+                "Warranty",
+                "Availability"
+        };
     }
 }
