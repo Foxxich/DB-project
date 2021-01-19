@@ -19,14 +19,6 @@ public class ElementZamowienia implements DataBaseObject {
         this.discount = discount;
     }
 
-    public ElementZamowienia(int invoiceID, double price, int quantity, int itemID, int discount) {
-        this.invoiceID = invoiceID;
-        this.price = price;
-        this.quantity = quantity;
-        this.itemID = itemID;
-        this.discount = discount;
-    }
-
     public void setInvoiceElementID(int invoiceElementID) {
         this.invoiceElementID = invoiceElementID;
     }
@@ -51,11 +43,25 @@ public class ElementZamowienia implements DataBaseObject {
 
     @Override
     public Object[] getAsObject() {
-        return new Object[0];
+        return new Object[] {
+                this.invoiceElementID,
+                this.invoiceID,
+                this.getPrice(),
+                this.quantity,
+                this.itemID,
+                this.discount
+        };
     }
 
     @Override
     public String[] getHeaders() {
-        return new String[0];
+        return new String[] {
+                "InvoiceElementID",
+                "InvoiceID",
+                "Price",
+                "Quantity",
+                "ItemID",
+                "Discount"
+        };
     }
 }

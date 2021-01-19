@@ -20,15 +20,6 @@ public class Klient implements DataBaseObject {
         this.phone = phone;
     }
 
-    public Klient(String name, String surname, String sex, String dateBirth, String email, String phone) {
-        this.name = name;
-        this.surname = surname;
-        this.sex = sex;
-        this.dateBirth = dateBirth;
-        this.email = email;
-        this.phone = phone;
-    }
-
     public void setClientID(int clientID) {
         this.clientID = clientID;
     }
@@ -66,12 +57,28 @@ public class Klient implements DataBaseObject {
 
     @Override
     public Object[] getAsObject() {
-        return new Object[0];
+        return new Object[] {
+                this.clientID,
+                this.name,
+                this.surname,
+                this.sex,
+                this.dateBirth,
+                this.email,
+                this.phone,
+        };
     }
 
     @Override
     public String[] getHeaders() {
-        return new String[0];
+        return new String[] {
+                "ID",
+                "Name",
+                "Surname",
+                "Sex",
+                "DateBirth",
+                "Email",
+                "PhoneNumber"
+        };
     }
 }
 
