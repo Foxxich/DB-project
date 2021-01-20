@@ -8,10 +8,14 @@ import java.awt.event.ActionListener;
 public class Frame extends JFrame implements ActionListener {
 
     private JMenu menu, info;
-    private JMenuItem klient,zamowienie,elementy,towar,dokumentacja,instrukcja;
+    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja;
     private JMenuBar menuBar = new JMenuBar();
     private JRadioButtonMenuItem rbMenuItem;
     private Panel panel = new Panel();
+    DataAccessObject dataAccessObject = null;
+
+    private String user;
+    private String password;
 
     private static String dokumentacjaApp = "Created by (A+V)*L";
     private static String instrukcjaApp = "1.Uruchomic\n"+"2.Dodqc dane";
@@ -19,8 +23,17 @@ public class Frame extends JFrame implements ActionListener {
     @SuppressWarnings("unchecked")
     public Frame()
     {
-
         super("DateBase");
+        user = JOptionPane.showInputDialog( null, "Enter User Name");
+        password = JOptionPane.showInputDialog(null, "Enter Passwors" );
+        dataAccessObject = new DataBaseSQL(user,password);
+        if(dataAccessObject.checkUser(user,password)) {
+            JOptionPane.showMessageDialog(this,"U r logged to database");
+        } else {
+            JOptionPane.showMessageDialog(this,"Incorrect parameters");
+            user = JOptionPane.showInputDialog( null, "Enter User Name one more time");
+            password = JOptionPane.showInputDialog(null, "Enter Password one more time" );
+        }
         menu = new JMenu("Menu");
         info = new JMenu("Info");
         klient = new JMenuItem("Klient");
@@ -35,9 +48,10 @@ public class Frame extends JFrame implements ActionListener {
         elementy.addActionListener(e -> {
             //panel.setTable(null);
         });
-        towar = new JMenuItem("Towar");
-        towar.addActionListener(e -> {
-            //panel.setTable(null);
+        towarMenu = new JMenuItem("Towar");
+        towarMenu.addActionListener(e -> {
+            dataAccessObject.selectTowar();
+            //panel.setTable();
         });
         dokumentacja = new JMenuItem("Dokumentacja");
         dokumentacja.addActionListener(e -> {
@@ -51,14 +65,13 @@ public class Frame extends JFrame implements ActionListener {
         //this.setContentPane(panel);
         menuBar.add(menu);
         menuBar.add(info);
-        menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towar);
+        menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towarMenu);
         info.add(dokumentacja); info.add(instrukcja);
         this.add(menuBar);
         this.setJMenuBar(menuBar);
         this.setSize(700,700);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new Panel();
-        panel.setZamowienieTable();
         this.setContentPane(panel);
         this.setVisible(true);
 

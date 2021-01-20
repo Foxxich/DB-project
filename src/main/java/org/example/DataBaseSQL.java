@@ -1,6 +1,9 @@
 package org.example;
 
+import java.awt.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DataBaseSQL implements DataAccessObject
 //implements DataAccessObject
@@ -9,15 +12,32 @@ public class DataBaseSQL implements DataAccessObject
     private static final String dbURL = "jdbc:mariadb://localhost/zakupy";
     private String user;
     private String password;
+    ArrayList<Towar> towars = new ArrayList<>();
+    ArrayList<Klient> klients = new ArrayList<>();
+    ArrayList<Zamowienie> zamowienies = new ArrayList<>();
+    ArrayList<ElementZamowienia> elementZamowienias = new ArrayList<>();
 
     public DataBaseSQL(String user, String password) {
         this.user = user;
         this.password = password;
     }
 
+    @Override
+    public boolean checkUser(String user, String password) {
+        try {
+            Connection conn = DriverManager.getConnection(dbURL, user, password);
+            if(conn != null) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
 
     @Override
-    public void selectKlient() {
+    public ArrayList<Klient> selectKlient() {
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -32,16 +52,18 @@ public class DataBaseSQL implements DataAccessObject
                 String date = rs.getString("Data_urodzenia");
                 String email = rs.getString("Email");
                 String phone = rs.getString("Telefon");
+                klients.add(new Klient(id,name,surname,sex,date,email,phone));
             }
             rs.close();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
         }
+        return klients;
     }
 
     @Override
-    public void selectZamowienie() {
+    public ArrayList<Zamowienie> selectZamowienie() {
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -53,16 +75,18 @@ public class DataBaseSQL implements DataAccessObject
                 String time = rs.getString("Czas_zlozenia");
                 String state = rs.getString("Stan");
                 int clientID = rs.getInt("Id_klienta");
+                zamowienies.add(new Zamowienie(id,time,state,clientID));
             }
             rs.close();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
         }
+        return zamowienies;
     }
 
     @Override
-    public void selectElementZamowienia() {
+    public ArrayList<ElementZamowienia> selectElementZamowienia() {
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -76,16 +100,18 @@ public class DataBaseSQL implements DataAccessObject
                 int quantity = rs.getInt("Ilosc_produktow");
                 int itemID = rs.getInt("Id_produktu");
                 int discount = rs.getInt("Znizka");
+                elementZamowienias.add(new ElementZamowienia(id,invoiceID,price,quantity,itemID,discount));
             }
             rs.close();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
         }
+        return elementZamowienias;
     }
 
     @Override
-    public void selectTowar() {
+    public ArrayList<Towar> selectTowar() {
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -99,12 +125,14 @@ public class DataBaseSQL implements DataAccessObject
                 String producent = rs.getString("Producent");
                 String warranty = rs.getString("Gwarancja");
                 int availability = rs.getInt("Dostepnosc");
+                towars.add(new Towar(id,name,ean,producent,warranty,availability));
             }
             rs.close();
         } catch (SQLException ex)
         {
             ex.printStackTrace();
         }
+        return towars;
     }
 
     @Override

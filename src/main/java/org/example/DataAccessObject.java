@@ -1,16 +1,20 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 //Example of protected variation
 public interface DataAccessObject {
 
-    void selectKlient();
+    public boolean checkUser(String user, String password);
 
-    void selectZamowienie();
+    ArrayList<Klient> selectKlient();
 
-    void selectElementZamowienia();
+    ArrayList<Zamowienie> selectZamowienie();
 
-    void selectTowar();
+    ArrayList<ElementZamowienia> selectElementZamowienia();
+
+    ArrayList<Towar> selectTowar();
 
     /*
      *  This method is used for inserting of products.

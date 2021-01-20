@@ -19,16 +19,6 @@ public class Panel extends JPanel {
         add(jScrollPane, BorderLayout.CENTER);
     }
 
-    public void setZamowienieTable() {
-        Zamowienie zamowienie = new Zamowienie(100,"zamow","12.12.12",122);
-        String[] columnNames = zamowienie.getHeaders();
-        Collection<Object[]> zamowienieObject = new ArrayList<>();
-        zamowienieObject.add(zamowienie.getAsObject());
-        Object[][] objects = zamowienieObject.toArray(new Object[zamowienieObject.size()][]);
-        jTable = new JTable(objects,columnNames);
-        this.add(new JScrollPane(jTable));
-    }
-
     public void setTable(ArrayList<DataBaseObject> dataBaseObjects) {
         String[] columnNames = dataBaseObjects.get(0).getHeaders();
         Collection<Object[]> collection = new ArrayList<>();
