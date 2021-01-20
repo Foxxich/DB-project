@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Map;
+
 //Example of Low coupling and High cohesion class
 public class ElementZamowienia implements DataBaseObject {
     private int quantity;
@@ -63,5 +65,19 @@ public class ElementZamowienia implements DataBaseObject {
                 "ItemID",
                 "Discount"
         };
+    }
+
+    @Override
+    public int getID() {
+        return this.invoiceElementID;
+    }
+
+    @Override
+    public Map<String, Object> getAsMap() {
+        return null;
+    }
+
+    @Override
+    public void setFromMap(Map<String, Object> map) {
     }
 }

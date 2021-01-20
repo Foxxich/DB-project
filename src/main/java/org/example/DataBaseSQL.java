@@ -8,22 +8,21 @@ import java.util.Collection;
 public class DataBaseSQL implements DataAccessObject
 //implements DataAccessObject
 {
+    //TODO dataBaseObjects.isEmpty dla innych
+    //TODO musimy selektowac tabele za kazdym razem po edycji
+    //TODO handler modify methods
 
     private static final String dbURL = "jdbc:mariadb://localhost/zakupy";
     private String user;
     private String password;
-    ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
-
-    public DataBaseSQL(String user, String password) {
-        this.user = user;
-        this.password = password;
-    }
 
     @Override
     public boolean checkUser(String user, String password) {
         try {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
             if(conn != null) {
+                this.user = user;
+                this.password = password;
                 return true;
             }
         } catch (SQLException throwables) {
@@ -35,6 +34,7 @@ public class DataBaseSQL implements DataAccessObject
 
     @Override
     public ArrayList<DataBaseObject> selectKlient() {
+        ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -56,11 +56,15 @@ public class DataBaseSQL implements DataAccessObject
         {
             ex.printStackTrace();
         }
+        if(dataBaseObjects.isEmpty()) {
+            dataBaseObjects.add(new Klient(-1,null,null,null,null,null,null));
+        }
         return dataBaseObjects;
     }
 
     @Override
     public ArrayList<DataBaseObject> selectZamowienie() {
+        ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -84,6 +88,7 @@ public class DataBaseSQL implements DataAccessObject
 
     @Override
     public ArrayList<DataBaseObject> selectElementZamowienia() {
+        ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -109,6 +114,7 @@ public class DataBaseSQL implements DataAccessObject
 
     @Override
     public ArrayList<DataBaseObject> selectTowar() {
+        ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);

@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.HashMap;
+import java.util.Map;
+
 //Example of Low coupling and High cohesion class
 public class Klient implements DataBaseObject {
     private int clientID;
@@ -79,6 +82,29 @@ public class Klient implements DataBaseObject {
                 "Email",
                 "PhoneNumber"
         };
+    }
+
+    @Override
+    public int getID() {
+        return this.clientID;
+    }
+
+    @Override
+    public Map<String, Object> getAsMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("ID",clientID);
+        map.put("Name",name);
+        map.put("Surname",surname);
+        map.put("Sex",sex);
+        map.put("DateBirth",dateBirth);
+        map.put("Email",email);
+        map.put("PhoneNumber",phone);
+        return map;
+    }
+
+    @Override
+    public void setFromMap(Map<String, Object> map) {
+
     }
 }
 

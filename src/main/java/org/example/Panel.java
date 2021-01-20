@@ -20,14 +20,32 @@ public class Panel extends JPanel {
     }
 
     public void setTable(ArrayList<DataBaseObject> dataBaseObjects) {
-        String[] columnNames = dataBaseObjects.get(0).getHeaders();
-        Collection<Object[]> collection = new ArrayList<>();
-        for(DataBaseObject dataBaseObject : dataBaseObjects) {
-            collection.add(dataBaseObject.getAsObject());
+        String[] columnNames = {};
+        Object[][] objects = {};
+        this.remove(jScrollPane);
+        if(!dataBaseObjects.isEmpty()) {
+            columnNames = dataBaseObjects.get(0).getHeaders();
+            Collection<Object[]> collection = new ArrayList<>();
+            for (DataBaseObject dataBaseObject : dataBaseObjects) {
+                if(dataBaseObject.getID() != -1) {
+                    collection.add(dataBaseObject.getAsObject());
+                }
+            }
+            objects = collection.toArray(new Object[collection.size()][]);
+            System.out.println("Object"+collection);
         }
-        Object[][] objects = collection.toArray(new Object[collection.size()][]);
+
+        System.out.println("Column"+columnNames);
         jTable = new JTable(objects,columnNames);
-        this.add(new JScrollPane(jTable));
+        jScrollPane = new JScrollPane(jTable);
+        jScrollPane.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()));
+       //this.add(jScrollPane);
+        add(jScrollPane, BorderLayout.CENTER);
+        validate();
+        repaint();
     }
 
+    public void addDataBaseObject(DataBaseObject dataBaseObject) {
+
+    }
 }

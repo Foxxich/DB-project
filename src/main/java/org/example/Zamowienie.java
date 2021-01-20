@@ -2,6 +2,8 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
 //Example of Low coupling and High cohesion class
 public class Zamowienie implements DataBaseObject {
     private int clientID;
@@ -56,5 +58,20 @@ public class Zamowienie implements DataBaseObject {
                 "State",
                 "ClientID"
         };
+    }
+
+    @Override
+    public int getID() {
+        return this.invoiceID;
+    }
+
+    @Override
+    public Map<String, Object> getAsMap() {
+        return null;
+    }
+
+    @Override
+    public void setFromMap(Map<String, Object> map) {
+
     }
 }

@@ -4,18 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 public class Frame extends JFrame implements ActionListener {
 
-    private JMenu menu, info;
-    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja;
+    //TODO - refactor variables
+    private JMenu menu, info,edycja;
+    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie;
     private JMenuBar menuBar = new JMenuBar();
     private JRadioButtonMenuItem rbMenuItem;
     private Panel panel = new Panel();
     DataAccessObject dataAccessObject = null;
-
-    private String user;
-    private String password;
+    Controller controller = null;
 
     private static String dokumentacjaApp = "Created by (A+V)*L";
     private static String instrukcjaApp = "1.Uruchomic\n"+"2.Dodqc dane";
@@ -24,33 +24,47 @@ public class Frame extends JFrame implements ActionListener {
     public Frame()
     {
         super("DateBase");
-        user = JOptionPane.showInputDialog( null, "Enter User Name");
-        password = JOptionPane.showInputDialog(null, "Enter Password" );
-        dataAccessObject = new DataBaseSQL(user,password);
-        if(dataAccessObject.checkUser(user,password)) {
-            JOptionPane.showMessageDialog(this,"U r logged to database");
-        } else {
-            JOptionPane.showMessageDialog(this,"Incorrect parameters");
-            user = JOptionPane.showInputDialog( null, "Enter User Name one more time");
-            password = JOptionPane.showInputDialog(null, "Enter Password one more time" );
+        controller = new Controller();
+        String user = JOptionPane.showInputDialog( null, "Enter User Name");
+        String password = JOptionPane.showInputDialog(null, "Enter Password" );
+        while(true) {
+            if(controller.logToDatabase(user,password)) {
+                JOptionPane.showMessageDialog(this,"U r logged to database");
+                break;
+            } else {
+                JOptionPane.showMessageDialog(this,"Incorrect parameters");
+                user = JOptionPane.showInputDialog( null, "Enter User Name one more time");
+                password = JOptionPane.showInputDialog(null, "Enter Password one more time" );
+            }
         }
         menu = new JMenu("Menu");
+        edycja = new JMenu("Edycja");
         info = new JMenu("Info");
         klient = new JMenuItem("Klient");
         klient.addActionListener(e -> {
-            panel.setTable(dataAccessObject.selectKlient());
+            panel.setTable(controller.selectKlient());
         });
         zamowienie = new JMenuItem("Zamowienie");
         zamowienie.addActionListener(e -> {
-            panel.setTable(dataAccessObject.selectZamowienie());
+            panel.setTable(controller.selectZamowienie());
         });
         elementy = new JMenuItem("Elementy");
         elementy.addActionListener(e -> {
-            panel.setTable(dataAccessObject.selectElementZamowienia());
+            panel.setTable(controller.selectElementZamowienia());
         });
         towarMenu = new JMenuItem("Towar");
         towarMenu.addActionListener(e -> {
-            panel.setTable(dataAccessObject.selectTowar());
+            panel.setTable(controller.selectTowar());
+            this.pack();
+        });
+        dodanie = new JMenuItem("Dodanie");
+        dodanie.addActionListener(e -> {
+            panel.addDataBaseObject(controller.getDataBaseObjects().get(0));
+            panel.setTable(controller.refreshTable());
+        });
+        usuniecie = new JMenuItem("Usuniecie");
+        usuniecie.addActionListener(e -> {
+
         });
         dokumentacja = new JMenuItem("Dokumentacja");
         dokumentacja.addActionListener(e -> {
@@ -65,16 +79,24 @@ public class Frame extends JFrame implements ActionListener {
         menuBar.add(menu);
         menuBar.add(info);
         menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towarMenu);
+        edycja.add(dodanie); edycja.add(usuniecie);
         info.add(dokumentacja); info.add(instrukcja);
         this.add(menuBar);
         this.setJMenuBar(menuBar);
-        this.setSize(700,700);
+        this.setSize(1000,1000);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new Panel();
+
+        this.panel.setPreferredSize(new Dimension(1000,1000));
         this.setContentPane(panel);
+
         this.setVisible(true);
+    }
 
-
+    public Map<String, Object> openModifyFrame(Map<String,Object> map) {
+        //TODO - return that value
+        ModifyFrame modifyFrame = new ModifyFrame(map);
+        return null;
     }
 
     @Override
