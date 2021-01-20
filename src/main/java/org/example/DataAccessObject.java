@@ -8,13 +8,13 @@ public interface DataAccessObject {
 
     public boolean checkUser(String user, String password);
 
-    ArrayList<Klient> selectKlient();
+    ArrayList<DataBaseObject> selectKlient();
 
-    ArrayList<Zamowienie> selectZamowienie();
+    ArrayList<DataBaseObject> selectZamowienie();
 
-    ArrayList<ElementZamowienia> selectElementZamowienia();
+    ArrayList<DataBaseObject> selectElementZamowienia();
 
-    ArrayList<Towar> selectTowar();
+    ArrayList<DataBaseObject> selectTowar();
 
     /*
      *  This method is used for inserting of products.
