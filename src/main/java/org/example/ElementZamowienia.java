@@ -1,5 +1,7 @@
 package org.example;
 
+import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 //Example of Low coupling and High cohesion class
@@ -8,7 +10,6 @@ public class ElementZamowienia implements DataBaseObject {
     private int invoiceElementID = -1;
     private int invoiceID;
     private double price;
-    private double totalPrice;
     private int itemID;
     private int discount;
 
@@ -21,6 +22,10 @@ public class ElementZamowienia implements DataBaseObject {
         this.discount = discount;
     }
 
+    public ElementZamowienia(Map<String, Object> map) {
+        this.setFromMap(map);
+    }
+
     public void setInvoiceElementID(int invoiceElementID) {
         this.invoiceElementID = invoiceElementID;
     }
@@ -31,8 +36,19 @@ public class ElementZamowienia implements DataBaseObject {
 
     public int getInvoiceID() { return invoiceID; }
 
+    public String getTotalPrice() {
+        double totalPrice = quantity * price * ((100 - discount) / 100.0 );
+        String priceToString = new DecimalFormat("#0.00").format(totalPrice);
+        return priceToString;
+    }
+
     public double getPrice() {
-        return  quantity * price * ((100 - discount) / 100.0 );
+        return price;
+    }
+
+    public String getPriceAsString() {
+        String priceToString = new DecimalFormat("#0.00").format(price);
+        return priceToString;
     }
 
     public int getQuantity() {
@@ -48,10 +64,11 @@ public class ElementZamowienia implements DataBaseObject {
         return new Object[] {
                 this.invoiceElementID,
                 this.invoiceID,
-                this.getPrice(),
+                this.getPriceAsString(),
                 this.quantity,
                 this.itemID,
-                this.discount
+                this.discount,
+                this.getTotalPrice()
         };
     }
 
@@ -63,7 +80,8 @@ public class ElementZamowienia implements DataBaseObject {
                 "Price",
                 "Quantity",
                 "ItemID",
-                "Discount"
+                "Discount",
+                "Total Price"
         };
     }
 
@@ -74,10 +92,23 @@ public class ElementZamowienia implements DataBaseObject {
 
     @Override
     public Map<String, Object> getAsMap() {
-        return null;
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("ID",invoiceElementID);
+        map.put("InvoiceID",invoiceID);
+        map.put("Price",getPriceAsString());
+        map.put("Quantity",quantity);
+        map.put("ItemID",itemID);
+        map.put("Discount",discount);
+        return map;
     }
 
     @Override
     public void setFromMap(Map<String, Object> map) {
+        this.invoiceElementID = (int) map.get("ID");
+        this.invoiceID = Integer.parseInt(map.get("InvoiceID").toString());
+        this.price = Double.parseDouble((String) map.get("Price"));
+        this.quantity = Integer.parseInt((String) map.get("Quantity"));
+        this.itemID = Integer.parseInt((String) map.get("ItemID"));
+        this.discount = Integer.parseInt((String) map.get("Discount"));
     }
 }

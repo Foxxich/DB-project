@@ -1,6 +1,9 @@
 package org.example;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,10 @@ public class Zamowienie implements DataBaseObject {
         this.invoiceID = invoiceID;
         this.state = state;
         this.time = time;
+    }
+
+    public Zamowienie(Map<String, Object> map) {
+        this.setFromMap(map);
     }
 
     public void setInvoiceID(int invoiceID) {
@@ -40,23 +47,38 @@ public class Zamowienie implements DataBaseObject {
         return time;
     }
 
+    public void setElements(List<ElementZamowienia> elements) {
+        this.elements = elements;
+    }
+
+    public String getTotalPrice() {
+        double totalPrice = 0;
+        for (ElementZamowienia elementZamowienia : elements) {
+            totalPrice += Double.parseDouble(elementZamowienia.getTotalPrice());
+        }
+        String priceToString = new DecimalFormat("#0.00").format(totalPrice);
+        return priceToString;
+    }
+
     @Override
     public Object[] getAsObject() {
         return new Object[] {
                 this.invoiceID,
                 this.time,
                 this.state,
-                this.clientID
+                this.clientID,
+                this.getTotalPrice()
         };
     }
 
     @Override
     public String[] getHeaders() {
         return new String[] {
-                "InvoiceID",
+                "ID",
                 "Time",
                 "State",
-                "ClientID"
+                "ClientID",
+                "Total Price"
         };
     }
 
@@ -67,11 +89,17 @@ public class Zamowienie implements DataBaseObject {
 
     @Override
     public Map<String, Object> getAsMap() {
-        return null;
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("ID",invoiceID);
+        map.put("State",state);
+        map.put("ClientID",clientID);
+        return map;
     }
 
     @Override
     public void setFromMap(Map<String, Object> map) {
-
+        this.invoiceID = (int) map.get("ID");
+        this.state = (String) map.get("State");
+        this.clientID = Integer.parseInt((String) map.get("ClientID"));
     }
 }

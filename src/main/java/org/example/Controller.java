@@ -1,6 +1,8 @@
 package org.example;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Controller {
     ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
@@ -19,19 +21,23 @@ public class Controller {
     }
 
     public ArrayList<DataBaseObject> selectKlient() {
-        return dataAccessObject.selectKlient();
+        dataBaseObjects = dataAccessObject.selectKlient();
+        return dataBaseObjects;
     }
 
     public ArrayList<DataBaseObject> selectZamowienie() {
-        return dataAccessObject.selectZamowienie();
+        dataBaseObjects = dataAccessObject.selectZamowienie();
+        return dataBaseObjects;
     }
 
     public ArrayList<DataBaseObject> selectElementZamowienia() {
-        return dataAccessObject.selectElementZamowienia();
+        dataBaseObjects = dataAccessObject.selectElementZamowienia();
+        return dataBaseObjects;
     }
 
     public ArrayList<DataBaseObject> selectTowar() {
-        return dataAccessObject.selectTowar();
+        dataBaseObjects = dataAccessObject.selectTowar();
+        return dataBaseObjects;
     }
 
     public ArrayList<DataBaseObject> refreshTable() {
@@ -46,5 +52,62 @@ public class Controller {
         }
         return null;
     }
+
+    public void addOrModifyDataBaseObject(Map<String, Object> map) throws SQLException {
+        if(dataBaseObjects.get(0) instanceof Klient) {
+            Klient klient = new Klient(map);
+            System.out.println(klient.toString());
+            if(klient.getClientID() == -1) {
+                dataAccessObject.addKlient(klient);
+            } else {
+                System.out.println(klient.getClientID()+"IS");
+                dataAccessObject.updateKlient(klient);
+            }
+        } else if (dataBaseObjects.get(0) instanceof Towar) {
+            Towar towar = new Towar(map);
+            System.out.println(towar.toString());
+            if(towar.getItemId() == -1) {
+                dataAccessObject.addTowar(towar);
+            } else {
+                System.out.println(towar.getItemId()+"IS");
+                dataAccessObject.updateTowar(towar);
+            }
+        } else if (dataBaseObjects.get(0) instanceof Zamowienie) {
+            Zamowienie zamowienie = new Zamowienie(map);
+            System.out.println(zamowienie.toString());
+            if(zamowienie.getInvoiceID() == -1) {
+                dataAccessObject.addZamowienie(zamowienie);
+            } else {
+                System.out.println(zamowienie.getInvoiceID()+"IS");
+                dataAccessObject.updateZamowienie(zamowienie);
+            }
+        } if (dataBaseObjects.get(0) instanceof ElementZamowienia) {
+            ElementZamowienia elementZamowienia = new ElementZamowienia(map);
+            System.out.println(elementZamowienia.toString());
+            if(elementZamowienia.getInvoiceElementID() == -1) {
+                dataAccessObject.addElement(elementZamowienia);
+            } else {
+                System.out.println(elementZamowienia.getInvoiceElementID()+"IS");
+                dataAccessObject.updateElement(elementZamowienia);
+            }
+        }
+    }
+
+    public void deleteObject(int objectID) {
+        if(dataBaseObjects.get(0) instanceof Klient) {
+            dataAccessObject.deleteKlient(objectID);
+        }
+    }
+
+    public DataBaseObject getObjectById(int id) {
+        for(DataBaseObject dataBaseObject : dataBaseObjects) {
+            if(dataBaseObject.getID() == id) {
+                return dataBaseObject;
+            }
+        }
+
+        return null;
+    }
+
 }
 

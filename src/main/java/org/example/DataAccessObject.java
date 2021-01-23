@@ -1,5 +1,6 @@
 package org.example;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,7 +45,7 @@ public interface DataAccessObject {
     /*
      *  This method is used for updating of clients.
      */
-    void updateKlient(Klient klient);
+    void updateKlient(Klient klient) throws SQLException;
 
     /*
      *  This method is used for updating of invoices.
@@ -75,4 +76,6 @@ public interface DataAccessObject {
      *  This method is used for getting all invoices with given id of item
      */
     void returnZamowieniaZTowarem(Towar towar);
+
+    void deleteKlient(int klientID);
 }

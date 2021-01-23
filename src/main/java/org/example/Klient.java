@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 //Example of Low coupling and High cohesion class
@@ -21,6 +22,10 @@ public class Klient implements DataBaseObject {
         this.dateBirth = dateBirth;
         this.email = email;
         this.phone = phone;
+    }
+
+    public Klient(Map<String, Object> map) {
+        this.setFromMap(map);
     }
 
     public void setClientID(int clientID) {
@@ -91,12 +96,12 @@ public class Klient implements DataBaseObject {
 
     @Override
     public Map<String, Object> getAsMap() {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("ID",clientID);
         map.put("Name",name);
         map.put("Surname",surname);
         map.put("Sex",sex);
-        map.put("DateBirth",dateBirth);
+        map.put("DateBirth(YYYY.MM.DD)",dateBirth);
         map.put("Email",email);
         map.put("PhoneNumber",phone);
         return map;
@@ -104,7 +109,13 @@ public class Klient implements DataBaseObject {
 
     @Override
     public void setFromMap(Map<String, Object> map) {
-
+        this.clientID = (int) map.get("ID");
+        this.name = (String) map.get("Name");
+        this.surname = (String) map.get("Surname");
+        this.sex = (String) map.get("Sex");
+        this.dateBirth = (String) map.get("DateBirth(YYYY.MM.DD)");
+        this.email = (String) map.get("Email");
+        this.phone = (String) map.get("PhoneNumber");
     }
 }
 

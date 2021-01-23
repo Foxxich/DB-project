@@ -1,6 +1,9 @@
 package org.example;
 
 import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 
 //Example of Low coupling and High cohesion class
 public class Towar implements DataBaseObject {
@@ -19,6 +22,10 @@ public class Towar implements DataBaseObject {
         this.producer = producer;
         this.warranty = warranty;
         this.availability = availability;
+    }
+
+    public Towar(Map<String, Object> map) {
+        this.setFromMap(map);
     }
 
     public int getItemId() {
@@ -61,7 +68,7 @@ public class Towar implements DataBaseObject {
     @Override
     public String[] getHeaders() {
         return new String[] {
-                "ItemID",
+                "ID",
                 "Name",
                 "EAN",
                 "Producer",
@@ -77,11 +84,23 @@ public class Towar implements DataBaseObject {
 
     @Override
     public Map<String, Object> getAsMap() {
-        return null;
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("ID",itemId);
+        map.put("Name",name);
+        map.put("EAN",ean);
+        map.put("Producer",producer);
+        map.put("Warranty",warranty);
+        map.put("Availability",availability);
+        return map;
     }
 
     @Override
     public void setFromMap(Map<String, Object> map) {
-
+        this.itemId = (int) map.get("ID");
+        this.name = (String) map.get("Name");
+        this.ean = (String) map.get("EAN");
+        this.producer = (String) map.get("Producer");
+        this.warranty = (String) map.get("Warranty");
+        this.availability = Integer.parseInt((String) map.get("Availability"));
     }
 }

@@ -8,9 +8,7 @@ import java.util.Collection;
 public class DataBaseSQL implements DataAccessObject
 //implements DataAccessObject
 {
-    //TODO dataBaseObjects.isEmpty dla innych
-    //TODO musimy selektowac tabele za kazdym razem po edycji
-    //TODO handler modify methods
+    //TODO - add statements to throw exception to GUI + delete
 
     private static final String dbURL = "jdbc:mariadb://localhost/zakupy";
     private String user;
@@ -35,6 +33,7 @@ public class DataBaseSQL implements DataAccessObject
     @Override
     public ArrayList<DataBaseObject> selectKlient() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
+        dataBaseObjects.add(new Klient(-1,null,null,null,null,null,null));
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -56,15 +55,13 @@ public class DataBaseSQL implements DataAccessObject
         {
             ex.printStackTrace();
         }
-        if(dataBaseObjects.isEmpty()) {
-            dataBaseObjects.add(new Klient(-1,null,null,null,null,null,null));
-        }
         return dataBaseObjects;
     }
 
     @Override
     public ArrayList<DataBaseObject> selectZamowienie() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
+        dataBaseObjects.add(new Zamowienie(-1,null,null,0));
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -79,6 +76,12 @@ public class DataBaseSQL implements DataAccessObject
                 dataBaseObjects.add(new Zamowienie(id,time,state,clientID));
             }
             rs.close();
+            for(DataBaseObject dataBaseObject : dataBaseObjects) {
+                if(dataBaseObject.getID() != -1) {
+                    ArrayList<ElementZamowienia> dataBaseObjectArrayList = selectElementZamowieniaByZamowieniaId(dataBaseObject.getID());
+                    ((Zamowienie) dataBaseObject).setElements(dataBaseObjectArrayList);
+                }
+            }
         } catch (SQLException ex)
         {
             ex.printStackTrace();
@@ -86,9 +89,36 @@ public class DataBaseSQL implements DataAccessObject
         return dataBaseObjects;
     }
 
+    private ArrayList<ElementZamowienia> selectElementZamowieniaByZamowieniaId(int idZamowienia) {
+        ArrayList<ElementZamowienia> dataBaseObjects = new ArrayList<>();
+        try
+        {
+            Connection conn = DriverManager.getConnection(dbURL, user, password);
+            Statement statement = conn.createStatement();
+            String sql = "SELECT Id, Id_zamowienia, Cena_produktu, Ilosc_produktow, Id_produktu, Znizka FROM Element_zamowienia WHERE Id_zamowienia = "+idZamowienia;
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()) {
+                int id = rs.getInt("Id");
+                int invoiceID = rs.getInt("Id_zamowienia");
+                double price = rs.getDouble("Cena_produktu");
+                int quantity = rs.getInt("Ilosc_produktow");
+                int itemID = rs.getInt("Id_produktu");
+                int discount = rs.getInt("Znizka");
+                dataBaseObjects.add(new ElementZamowienia(id,invoiceID,price,quantity,itemID,discount));
+            }
+            rs.close();
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        return dataBaseObjects;
+    }
+
+
     @Override
     public ArrayList<DataBaseObject> selectElementZamowienia() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
+        dataBaseObjects.add(new ElementZamowienia(-1,0,0,0,0,0));
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -115,6 +145,7 @@ public class DataBaseSQL implements DataAccessObject
     @Override
     public ArrayList<DataBaseObject> selectTowar() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
+        dataBaseObjects.add(new Towar(-1,null,null,null,null,0));
         try
         {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
@@ -159,7 +190,7 @@ public class DataBaseSQL implements DataAccessObject
     public void addKlient(Klient klient) {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{call addTowar(?, ?, ?, ?, ?, ?}");
+                CallableStatement statement = conn.prepareCall("{call addKlient(?, ?, ?, ?, ?, ?)}");
         ) {
             statement.setString(1, klient.getName());
             statement.setString(2, klient.getSurname());
@@ -177,7 +208,7 @@ public class DataBaseSQL implements DataAccessObject
     public void addZamowienie(Zamowienie zamowienie) {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{call addTowar(?, ?}");
+                CallableStatement statement = conn.prepareCall("{call addZamowienie(?, ?)}");
         ) {
             statement.setString(1, zamowienie.getInvoiceState());
             statement.setInt(2, zamowienie.getClientId());
@@ -191,7 +222,7 @@ public class DataBaseSQL implements DataAccessObject
     public void addElement(ElementZamowienia elementZamowienia) {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{call addTowar(?, ?, ?, ?, ?}");
+                CallableStatement statement = conn.prepareCall("{call addElement(?, ?, ?, ?, ?)}");
         ) {
             statement.setInt(1, elementZamowienia.getInvoiceID());
             statement.setDouble(2, elementZamowienia.getPrice());
@@ -223,10 +254,10 @@ public class DataBaseSQL implements DataAccessObject
     }
 
     @Override
-    public void updateKlient(Klient klient) {
+    public void updateKlient(Klient klient) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{call updateTowar(?, ?, ?, ?, ?, ?, ?)}");
+                CallableStatement statement = conn.prepareCall("{call updateKlient(?, ?, ?, ?, ?, ?, ?)}");
         ) {
             statement.setInt(1, klient.getClientID());
             statement.setString(2, klient.getName());
@@ -238,6 +269,7 @@ public class DataBaseSQL implements DataAccessObject
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
@@ -245,9 +277,9 @@ public class DataBaseSQL implements DataAccessObject
     public void updateZamowienie(Zamowienie zamowienie) {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{call updateTowar(?, ?, ?)}");
+                CallableStatement statement = conn.prepareCall("{call updateZamowienie(?, ?, ?)}");
         ) {
-            statement.setInt(1, zamowienie.getClientId());
+            statement.setInt(1, zamowienie.getInvoiceID());
             statement.setString(2, zamowienie.getInvoiceState());
             statement.setInt(3, zamowienie.getClientId());
             statement.executeUpdate();
@@ -260,10 +292,10 @@ public class DataBaseSQL implements DataAccessObject
     public void updateElement(ElementZamowienia elementZamowienia) {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{call updateTowar(?, ?, ?, ?, ?, ?)}");
+                CallableStatement statement = conn.prepareCall("{call updateElement(?, ?, ?, ?, ?, ?)}");
         ) {
-            statement.setInt(1, elementZamowienia.getInvoiceID());
-            statement.setInt(2, elementZamowienia.getInvoiceElementID());
+            statement.setInt(1, elementZamowienia.getInvoiceElementID());
+            statement.setInt(2, elementZamowienia.getInvoiceID());
             statement.setDouble(3, elementZamowienia.getPrice());
             statement.setInt(4, elementZamowienia.getQuantity());
             statement.setInt(5, elementZamowienia.getItemID());
@@ -327,6 +359,18 @@ public class DataBaseSQL implements DataAccessObject
             statement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteKlient(int klientID) {
+        try {
+            Connection conn = DriverManager.getConnection(dbURL, user, password);
+            Statement statement = conn.createStatement();
+            String sql = "DELETE FROM Klient WHERE Id = "+klientID;
+            statement.executeQuery(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }

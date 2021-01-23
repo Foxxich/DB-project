@@ -9,7 +9,6 @@ import java.util.Collection;
 public class Panel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private Row rows = new Row();
     private JScrollPane jScrollPane = new JScrollPane();
     private JTable jTable = null;
 
@@ -45,7 +44,12 @@ public class Panel extends JPanel {
         repaint();
     }
 
-    public void addDataBaseObject(DataBaseObject dataBaseObject) {
+    public int getSelectedObjectId() {
+        int row = jTable.getSelectedRow();
+        if(row != -1) {
+            return Integer.parseInt(jTable.getModel().getValueAt(row, 0).toString());
+        }
 
+        return -1;
     }
 }

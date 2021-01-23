@@ -4,17 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Map;
 
 public class Frame extends JFrame implements ActionListener {
 
     //TODO - refactor variables
     private JMenu menu, info,edycja;
-    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie;
+    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie, edytowanie;
     private JMenuBar menuBar = new JMenuBar();
     private JRadioButtonMenuItem rbMenuItem;
     private Panel panel = new Panel();
-    DataAccessObject dataAccessObject = null;
     Controller controller = null;
 
     private static String dokumentacjaApp = "Created by (A+V)*L";
@@ -27,7 +27,7 @@ public class Frame extends JFrame implements ActionListener {
         controller = new Controller();
         String user = JOptionPane.showInputDialog( null, "Enter User Name");
         String password = JOptionPane.showInputDialog(null, "Enter Password" );
-        while(true) {
+        while(user != null && password != null) {
             if(controller.logToDatabase(user,password)) {
                 JOptionPane.showMessageDialog(this,"U r logged to database");
                 break;
@@ -59,12 +59,39 @@ public class Frame extends JFrame implements ActionListener {
         });
         dodanie = new JMenuItem("Dodanie");
         dodanie.addActionListener(e -> {
-            panel.addDataBaseObject(controller.getDataBaseObjects().get(0));
+            Map<String, Object> map = openModifyFrame(controller.getDataBaseObjects().get(0).getAsMap());
+            try {
+                controller.addOrModifyDataBaseObject(map);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                handleException(throwables);
+            }
             panel.setTable(controller.refreshTable());
+        });
+        edytowanie = new JMenuItem("Edytowanie");
+        edytowanie.addActionListener(e-> {
+            try {
+                int id = panel.getSelectedObjectId();
+                if(id == -1) {
+                    System.out.println("No row selected");  //TODO owrapować wyjątki i to też w jakieś sensowne komunikaty
+                } else {
+                    Map<String, Object> map = openModifyFrame(controller.getObjectById(id).getAsMap());
+                    controller.addOrModifyDataBaseObject(map);  //TODO (W) przetestować edycję (nie mam bazy danych :C)
+                    panel.setTable(controller.refreshTable());
+                }
+            } catch(Exception exception) {
+                handleException(exception);
+            }
         });
         usuniecie = new JMenuItem("Usuniecie");
         usuniecie.addActionListener(e -> {
-
+            int id = panel.getSelectedObjectId();
+            if(id == -1) {
+                System.out.println("No row selected");
+            } else {
+                controller.deleteObject(id);
+                panel.setTable(controller.refreshTable());
+            }
         });
         dokumentacja = new JMenuItem("Dokumentacja");
         dokumentacja.addActionListener(e -> {
@@ -77,9 +104,10 @@ public class Frame extends JFrame implements ActionListener {
         this.setLayout(new BorderLayout());
         //this.setContentPane(panel);
         menuBar.add(menu);
+        menuBar.add(edycja);
         menuBar.add(info);
         menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towarMenu);
-        edycja.add(dodanie); edycja.add(usuniecie);
+        edycja.add(dodanie); edycja.add(edytowanie); edycja.addSeparator(); edycja.add(usuniecie);
         info.add(dokumentacja); info.add(instrukcja);
         this.add(menuBar);
         this.setJMenuBar(menuBar);
@@ -93,10 +121,14 @@ public class Frame extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    private void handleException(Exception exception) {
+        JOptionPane.showMessageDialog(null,exception.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+    }
+
     public Map<String, Object> openModifyFrame(Map<String,Object> map) {
-        //TODO - return that value
-        ModifyFrame modifyFrame = new ModifyFrame(map);
-        return null;
+        ModifyFrame modifyFrame = new ModifyFrame(map, this);
+        Map<String, Object> returnValue = modifyFrame.showDialog();
+        return returnValue;
     }
 
     @Override
