@@ -411,7 +411,7 @@ public class DataBaseSQL implements DataAccessObject
         try {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
             Statement statement = conn.createStatement();
-            String sql = "DELETE FROM Towar WHERE Id = "+towarID;
+            String sql = "DELETE FROM Towar WHERE Id = " + towarID;
             statement.executeQuery(sql);
         } catch (SQLException ex) {
             ex.printStackTrace();

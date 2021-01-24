@@ -77,11 +77,11 @@ public interface DataAccessObject {
      */
     void returnZamowieniaZTowarem(Towar towar);
 
-    void deleteKlient(int klientID) throws SQLException;;
+    void deleteKlient(int klientID) throws SQLException;
 
-    void deleteZamowienie(int zamowienieID) throws SQLException;;
+    void deleteZamowienie(int zamowienieID) throws SQLException;
 
-    void deleteElementZamowienia(int elementZamowieniaID) throws SQLException;;
+    void deleteElementZamowienia(int elementZamowieniaID) throws SQLException;
 
-    void deleteTowar(int towarID) throws SQLException;;
+    void deleteTowar(int towarID) throws SQLException;
 }

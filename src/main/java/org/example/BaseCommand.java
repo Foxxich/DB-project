@@ -13,12 +13,10 @@ public class BaseCommand {
 
     public void doBackUp() {
         {
-            ArrayList<String> words = new ArrayList<>();
             String[] command = new String[]{"cmd.exe", "/c", "\"C:\\Program Files\\MariaDB 10.5\\bin\\mysqldump.exe\" --quick --lock-tables --user=\"root\" --password=\"2020\" zakupy > \"C:\\Users\\Vadym\\Documents\\testB\\file.sql\" "};
             Process process = null;
             try {
                 process = Runtime.getRuntime().exec(command);
-                System.out.println("Successfully wrote to the file.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -26,12 +24,10 @@ public class BaseCommand {
     }
 
     public void loadBackUp() {
-        ArrayList<String> words = new ArrayList<>();
-        String[] command = new String[]{"cmd.exe", "/c", "\"C:\\Program Files\\MariaDB 10.5\\bin\\mysql.exe\" --user=\"root\" --password=\"2020\" database_name < \"C:\\Users\\Vadym\\Documents\\testB\\file.sql\" "};
+        String[] command = new String[]{"cmd.exe", "/c", "\"C:\\Program Files\\MariaDB 10.5\\bin\\mysql.exe\" --user=\"root\" --password=\"2020\" backUp < \"C:\\Users\\Vadym\\Documents\\testB\\file.sql\" "};
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(command);
-            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             e.printStackTrace();
         }
