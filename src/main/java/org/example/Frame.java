@@ -11,7 +11,7 @@ public class Frame extends JFrame implements ActionListener {
 
     //TODO - refactor variables
     private JMenu menu, info,edycja,backup;
-    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie, edytowanie,saveBackUp;
+    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie, edytowanie,saveBackUp,loadBackUp;
     private JMenuBar menuBar = new JMenuBar();
     private JRadioButtonMenuItem rbMenuItem;
     private Panel panel = new Panel();
@@ -113,6 +113,11 @@ public class Frame extends JFrame implements ActionListener {
             BaseCommand baseCommand = new BaseCommand();
             baseCommand.doBackUp();
         });
+        loadBackUp = new JMenuItem("LoadBackUp");
+        loadBackUp.addActionListener(e -> {
+            BaseCommand baseCommand = new BaseCommand();
+            baseCommand.loadBackUp();
+        });
         this.setLayout(new BorderLayout());
         //this.setContentPane(panel);
         menuBar.add(menu);
@@ -122,7 +127,7 @@ public class Frame extends JFrame implements ActionListener {
         menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towarMenu);
         edycja.add(dodanie); edycja.add(edytowanie); edycja.addSeparator(); edycja.add(usuniecie);
         info.add(dokumentacja); info.add(instrukcja);
-        backup.add(saveBackUp);
+        backup.add(saveBackUp);backup.add(loadBackUp);
         this.add(menuBar);
         this.setJMenuBar(menuBar);
         this.setSize(1000,1000);
