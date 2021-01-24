@@ -10,8 +10,8 @@ import java.util.Map;
 public class Frame extends JFrame implements ActionListener {
 
     //TODO - refactor variables
-    private JMenu menu, info,edycja;
-    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie, edytowanie;
+    private JMenu menu, info,edycja,backup;
+    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie, edytowanie,saveBackUp;
     private JMenuBar menuBar = new JMenuBar();
     private JRadioButtonMenuItem rbMenuItem;
     private Panel panel = new Panel();
@@ -40,6 +40,7 @@ public class Frame extends JFrame implements ActionListener {
         menu = new JMenu("Menu");
         edycja = new JMenu("Edycja");
         info = new JMenu("Info");
+        backup = new JMenu("BackUp");
         klient = new JMenuItem("Klient");
         klient.addActionListener(e -> {
             panel.setTable(controller.selectKlient());
@@ -76,21 +77,27 @@ public class Frame extends JFrame implements ActionListener {
                     System.out.println("No row selected");  //TODO owrapować wyjątki i to też w jakieś sensowne komunikaty
                 } else {
                     Map<String, Object> map = openModifyFrame(controller.getObjectById(id).getAsMap());
-                    controller.addOrModifyDataBaseObject(map);  //TODO (W) przetestować edycję (nie mam bazy danych :C)
+                    controller.addOrModifyDataBaseObject(map);
                     panel.setTable(controller.refreshTable());
                 }
-            } catch(Exception exception) {
-                handleException(exception);
+            } catch(SQLException throwables) {
+                throwables.printStackTrace();
+                handleException(throwables);
             }
         });
         usuniecie = new JMenuItem("Usuniecie");
         usuniecie.addActionListener(e -> {
             int id = panel.getSelectedObjectId();
-            if(id == -1) {
-                System.out.println("No row selected");
-            } else {
-                controller.deleteObject(id);
-                panel.setTable(controller.refreshTable());
+            try {
+                if(id == -1) {
+                    System.out.println("No row selected");
+                } else {
+                    controller.deleteObject(id);
+                    panel.setTable(controller.refreshTable());
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                handleException(throwables);
             }
         });
         dokumentacja = new JMenuItem("Dokumentacja");
@@ -101,14 +108,21 @@ public class Frame extends JFrame implements ActionListener {
         instrukcja.addActionListener(e -> {
             JOptionPane.showMessageDialog(this,instrukcjaApp);
         });
+        saveBackUp = new JMenuItem("BackUp");
+        saveBackUp.addActionListener(e -> {
+            BaseCommand baseCommand = new BaseCommand();
+            baseCommand.doBackUp();
+        });
         this.setLayout(new BorderLayout());
         //this.setContentPane(panel);
         menuBar.add(menu);
         menuBar.add(edycja);
         menuBar.add(info);
+        menuBar.add(backup);
         menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towarMenu);
         edycja.add(dodanie); edycja.add(edytowanie); edycja.addSeparator(); edycja.add(usuniecie);
         info.add(dokumentacja); info.add(instrukcja);
+        backup.add(saveBackUp);
         this.add(menuBar);
         this.setJMenuBar(menuBar);
         this.setSize(1000,1000);

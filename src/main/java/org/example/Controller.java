@@ -93,9 +93,15 @@ public class Controller {
         }
     }
 
-    public void deleteObject(int objectID) {
+    public void deleteObject(int objectID) throws SQLException {
         if(dataBaseObjects.get(0) instanceof Klient) {
             dataAccessObject.deleteKlient(objectID);
+        } else if(dataBaseObjects.get(0) instanceof Zamowienie) {
+            dataAccessObject.deleteZamowienie(objectID);
+        } else if(dataBaseObjects.get(0) instanceof ElementZamowienia) {
+            dataAccessObject.deleteElementZamowienia(objectID);
+        } else if (dataBaseObjects.get(0) instanceof Towar) {
+            dataAccessObject.deleteTowar(objectID);
         }
     }
 

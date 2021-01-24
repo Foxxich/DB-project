@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ModifyFrame extends JDialog {
-    //TODO - add action listenetr to "Cancel"
     //TODO - handle dispose by exit button(make value map null) //outDispose method if using key or not exist X in frame
     JButton ok,cancel;
     JPanel panel;
@@ -33,6 +32,9 @@ public class ModifyFrame extends JDialog {
             this.dispose();
         });
         cancel = new JButton("Cancel");
+        cancel.addActionListener(e -> {
+            this.dispose();
+        });
         panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
@@ -49,7 +51,7 @@ public class ModifyFrame extends JDialog {
 
     private void createForm() {
         Dimension preferredDimension = new Dimension(this.getWidth() - 30, 20);
-        for(String key : valueMap.keySet()) {           //TODO dodać obsługę datepickera, albo wskazać format w nagłówku
+        for(String key : valueMap.keySet()) {
 
             JLabel label = new JLabel(key);
             label.setPreferredSize(preferredDimension);

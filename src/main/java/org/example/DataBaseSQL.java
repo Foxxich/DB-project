@@ -8,8 +8,6 @@ import java.util.Collection;
 public class DataBaseSQL implements DataAccessObject
 //implements DataAccessObject
 {
-    //TODO - add statements to throw exception to GUI + delete
-
     private static final String dbURL = "jdbc:mariadb://localhost/zakupy";
     private String user;
     private String password;
@@ -170,7 +168,7 @@ public class DataBaseSQL implements DataAccessObject
     }
 
     @Override
-    public void addTowar(Towar towar) {
+    public void addTowar(Towar towar) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call addTowar(?, ?, ?, ?, ?)}");
@@ -183,11 +181,12 @@ public class DataBaseSQL implements DataAccessObject
             statement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
     @Override
-    public void addKlient(Klient klient) {
+    public void addKlient(Klient klient) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call addKlient(?, ?, ?, ?, ?, ?)}");
@@ -201,11 +200,12 @@ public class DataBaseSQL implements DataAccessObject
             statement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
     @Override
-    public void addZamowienie(Zamowienie zamowienie) {
+    public void addZamowienie(Zamowienie zamowienie) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call addZamowienie(?, ?)}");
@@ -215,11 +215,12 @@ public class DataBaseSQL implements DataAccessObject
             statement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
     @Override
-    public void addElement(ElementZamowienia elementZamowienia) {
+    public void addElement(ElementZamowienia elementZamowienia) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call addElement(?, ?, ?, ?, ?)}");
@@ -232,11 +233,12 @@ public class DataBaseSQL implements DataAccessObject
             statement.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
     @Override
-    public void updateTowar(Towar towar) {
+    public void updateTowar(Towar towar) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call updateTowar(?, ?, ?, ?, ?, ?)}");
@@ -250,6 +252,7 @@ public class DataBaseSQL implements DataAccessObject
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
@@ -274,7 +277,7 @@ public class DataBaseSQL implements DataAccessObject
     }
 
     @Override
-    public void updateZamowienie(Zamowienie zamowienie) {
+    public void updateZamowienie(Zamowienie zamowienie) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call updateZamowienie(?, ?, ?)}");
@@ -285,11 +288,12 @@ public class DataBaseSQL implements DataAccessObject
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
     @Override
-    public void updateElement(ElementZamowienia elementZamowienia) {
+    public void updateElement(ElementZamowienia elementZamowienia) throws SQLException {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
                 CallableStatement statement = conn.prepareCall("{call updateElement(?, ?, ?, ?, ?, ?)}");
@@ -303,6 +307,7 @@ public class DataBaseSQL implements DataAccessObject
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw ex;
         }
     }
 
@@ -363,14 +368,54 @@ public class DataBaseSQL implements DataAccessObject
     }
 
     @Override
-    public void deleteKlient(int klientID) {
+    public void deleteKlient(int klientID) throws SQLException {
         try {
             Connection conn = DriverManager.getConnection(dbURL, user, password);
             Statement statement = conn.createStatement();
             String sql = "DELETE FROM Klient WHERE Id = "+klientID;
             statement.executeQuery(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
+    @Override
+    public void deleteZamowienie(int zamowienieID) throws SQLException {
+        try {
+            Connection conn = DriverManager.getConnection(dbURL, user, password);
+            Statement statement = conn.createStatement();
+            String sql = "DELETE FROM Zamowienia WHERE Id = "+zamowienieID;
+            statement.executeQuery(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
+    @Override
+    public void deleteElementZamowienia(int elementZamowieniaID) throws SQLException {
+        try {
+            Connection conn = DriverManager.getConnection(dbURL, user, password);
+            Statement statement = conn.createStatement();
+            String sql = "DELETE FROM Element_zamowienia WHERE Id = "+elementZamowieniaID;
+            statement.executeQuery(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
+    @Override
+    public void deleteTowar(int towarID) throws SQLException {
+        try {
+            Connection conn = DriverManager.getConnection(dbURL, user, password);
+            Statement statement = conn.createStatement();
+            String sql = "DELETE FROM Towar WHERE Id = "+towarID;
+            statement.executeQuery(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
         }
     }
 }
