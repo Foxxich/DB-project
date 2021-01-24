@@ -9,25 +9,23 @@ import java.util.Map;
 
 public class Frame extends JFrame implements ActionListener {
 
-    //TODO - refactor variables
-    private JMenu menu, info,edycja,backup;
-    private JMenuItem klient,zamowienie,elementy,towarMenu,dokumentacja,instrukcja,dodanie,usuniecie, edytowanie,saveBackUp,loadBackUp;
-    private JMenuBar menuBar = new JMenuBar();
-    private JRadioButtonMenuItem rbMenuItem;
     private Panel panel = new Panel();
-    Controller controller = null;
+    Controller controller;
 
-    private static String dokumentacjaApp = "Created by (A+V)*L";
-    private static String instrukcjaApp = "1.Uruchomic\n"+"2.Dodqc dane";
+    private static final String dokumentacjaApp = "Created by (A+V)*L";
+    private static final String instrukcjaApp = "1.Uruchomic\n"+"2.Dodqc dane";
 
-    @SuppressWarnings("unchecked")
     public Frame()
     {
         super("DateBase");
         controller = new Controller();
         String user = JOptionPane.showInputDialog( null, "Enter User Name");
         String password = JOptionPane.showInputDialog(null, "Enter Password" );
-        while(user != null && password != null) {
+        while(true) {
+            if(user == null && password == null) {
+                this.dispose();
+                return;
+            }
             if(controller.logToDatabase(user,password)) {
                 JOptionPane.showMessageDialog(this,"U r logged to database");
                 break;
@@ -37,58 +35,62 @@ public class Frame extends JFrame implements ActionListener {
                 password = JOptionPane.showInputDialog(null, "Enter Password one more time" );
             }
         }
-        menu = new JMenu("Menu");
-        edycja = new JMenu("Edycja");
-        info = new JMenu("Info");
-        backup = new JMenu("BackUp");
-        klient = new JMenuItem("Klient");
-        klient.addActionListener(e -> {
-            panel.setTable(controller.selectKlient());
-        });
-        zamowienie = new JMenuItem("Zamowienie");
-        zamowienie.addActionListener(e -> {
-            panel.setTable(controller.selectZamowienie());
-        });
-        elementy = new JMenuItem("Elementy");
-        elementy.addActionListener(e -> {
-            panel.setTable(controller.selectElementZamowienia());
-        });
-        towarMenu = new JMenuItem("Towar");
+        JMenu menu = new JMenu("Menu");
+        JMenu edycja = new JMenu("Edycja");
+        JMenu info = new JMenu("Info");
+        JMenu backup = new JMenu("BackUp");
+        JMenuItem klient = new JMenuItem("Klient");
+        klient.addActionListener(e -> panel.setTable(controller.selectKlient()));
+        JMenuItem zamowienie = new JMenuItem("Zamowienie");
+        zamowienie.addActionListener(e -> panel.setTable(controller.selectZamowienie()));
+        JMenuItem elementy = new JMenuItem("Elementy");
+        elementy.addActionListener(e -> panel.setTable(controller.selectElementZamowienia()));
+        JMenuItem towarMenu = new JMenuItem("Towar");
         towarMenu.addActionListener(e -> {
             panel.setTable(controller.selectTowar());
             this.pack();
         });
-        dodanie = new JMenuItem("Dodanie");
+        JMenuItem dodanie = new JMenuItem("Dodanie");
         dodanie.addActionListener(e -> {
-            Map<String, Object> map = openModifyFrame(controller.getDataBaseObjects().get(0).getAsMap());
             try {
+                Map<String, Object> map = openModifyFrame(controller.getDataBaseObjects().get(0).getAsMap());
+                if(map == null) {
+                    return;
+                }
                 controller.addOrModifyDataBaseObject(map);
+                panel.setTable(controller.refreshTable());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
                 handleException(throwables);
+            } catch (IndexOutOfBoundsException exception) {
+                handleException(new Exception("No table selected"));
             }
-            panel.setTable(controller.refreshTable());
         });
-        edytowanie = new JMenuItem("Edytowanie");
+        JMenuItem edytowanie = new JMenuItem("Edytowanie");
         edytowanie.addActionListener(e-> {
             try {
                 int id = panel.getSelectedObjectId();
                 if(id == -1) {
-                    System.out.println("No row selected");  //TODO owrapować wyjątki i to też w jakieś sensowne komunikaty
+                    System.out.println("No row selected");
                 } else {
                     Map<String, Object> map = openModifyFrame(controller.getObjectById(id).getAsMap());
+                    if(map == null) {
+                        return;
+                    }
                     controller.addOrModifyDataBaseObject(map);
                     panel.setTable(controller.refreshTable());
                 }
             } catch(SQLException throwables) {
                 throwables.printStackTrace();
                 handleException(throwables);
+            } catch (NullPointerException exception) {
+                handleException(new Exception("No row selected"));
             }
         });
-        usuniecie = new JMenuItem("Usuniecie");
+        JMenuItem usuniecie = new JMenuItem("Usuniecie");
         usuniecie.addActionListener(e -> {
-            int id = panel.getSelectedObjectId();
             try {
+                int id = panel.getSelectedObjectId();
                 if(id == -1) {
                     System.out.println("No row selected");
                 } else {
@@ -98,28 +100,26 @@ public class Frame extends JFrame implements ActionListener {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
                 handleException(throwables);
+            } catch (NullPointerException exception) {
+                handleException(new Exception("No row selected"));
             }
         });
-        dokumentacja = new JMenuItem("Dokumentacja");
-        dokumentacja.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,dokumentacjaApp);
-        });
-        instrukcja = new JMenuItem("Instrukcja");
-        instrukcja.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,instrukcjaApp);
-        });
-        saveBackUp = new JMenuItem("BackUp");
+        JMenuItem dokumentacja = new JMenuItem("Dokumentacja");
+        dokumentacja.addActionListener(e -> JOptionPane.showMessageDialog(this,dokumentacjaApp));
+        JMenuItem instrukcja = new JMenuItem("Instrukcja");
+        instrukcja.addActionListener(e -> JOptionPane.showMessageDialog(this,instrukcjaApp));
+        JMenuItem saveBackUp = new JMenuItem("DoBackUp");
         saveBackUp.addActionListener(e -> {
             BaseCommand baseCommand = new BaseCommand();
             baseCommand.doBackUp();
         });
-        loadBackUp = new JMenuItem("LoadBackUp");
+        JMenuItem loadBackUp = new JMenuItem("LoadBackUp");
         loadBackUp.addActionListener(e -> {
             BaseCommand baseCommand = new BaseCommand();
             baseCommand.loadBackUp();
         });
         this.setLayout(new BorderLayout());
-        //this.setContentPane(panel);
+        JMenuBar menuBar = new JMenuBar();
         menuBar.add(menu);
         menuBar.add(edycja);
         menuBar.add(info);
@@ -127,7 +127,8 @@ public class Frame extends JFrame implements ActionListener {
         menu.add(klient); menu.add(zamowienie); menu.add(elementy); menu.add(towarMenu);
         edycja.add(dodanie); edycja.add(edytowanie); edycja.addSeparator(); edycja.add(usuniecie);
         info.add(dokumentacja); info.add(instrukcja);
-        backup.add(saveBackUp);backup.add(loadBackUp);
+        backup.add(saveBackUp);
+        backup.add(loadBackUp);
         this.add(menuBar);
         this.setJMenuBar(menuBar);
         this.setSize(1000,1000);
@@ -146,8 +147,7 @@ public class Frame extends JFrame implements ActionListener {
 
     public Map<String, Object> openModifyFrame(Map<String,Object> map) {
         ModifyFrame modifyFrame = new ModifyFrame(map, this);
-        Map<String, Object> returnValue = modifyFrame.showDialog();
-        return returnValue;
+        return modifyFrame.showDialog();
     }
 
     @Override

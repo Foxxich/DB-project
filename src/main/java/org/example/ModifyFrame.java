@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ModifyFrame extends JDialog {
-    //TODO - handle dispose by exit button(make value map null) //outDispose method if using key or not exist X in frame
     JButton ok,cancel;
     JPanel panel;
 
@@ -17,6 +16,7 @@ public class ModifyFrame extends JDialog {
         super(parent,"Modify", true);
         this.setSize(250, valueMap.keySet().size() * 62);
         this.setResizable(false);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         ok = new JButton("Ok");
         ok.addActionListener(e -> {
             for(String key : valueMap.keySet()) {
@@ -33,6 +33,7 @@ public class ModifyFrame extends JDialog {
         });
         cancel = new JButton("Cancel");
         cancel.addActionListener(e -> {
+            valueZero();
             this.dispose();
         });
         panel = new JPanel();
@@ -47,6 +48,10 @@ public class ModifyFrame extends JDialog {
         panel.add(cancel);
 
         setContentPane(panel);
+    }
+
+    private void valueZero() {
+        valueMap = null;
     }
 
     private void createForm() {

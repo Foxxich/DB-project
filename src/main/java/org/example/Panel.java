@@ -35,7 +35,13 @@ public class Panel extends JPanel {
         }
 
         System.out.println("Column"+columnNames);
-        jTable = new JTable(objects,columnNames);
+        jTable = new JTable(objects,columnNames){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        jTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane = new JScrollPane(jTable);
         jScrollPane.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()));
        //this.add(jScrollPane);
