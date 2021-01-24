@@ -24,7 +24,7 @@ public class BaseCommand {
     }
 
     public void loadBackUp() {
-        String[] command = new String[]{"cmd.exe", "/c", "\"C:\\Program Files\\MariaDB 10.5\\bin\\mysql.exe\" --user=\"root\" --password=\"2020\" backUp < \"C:\\Users\\Vadym\\Documents\\testB\\file.sql\" "};
+        String[] command = new String[]{"cmd.exe", "/c", "\"C:\\Program Files\\MariaDB 10.5\\bin\\mysql.exe\" --user=\"root\" --password=\"2020\" zakupy < \"C:\\Users\\Vadym\\Documents\\testB\\file.sql\" "};
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(command);
