@@ -12,8 +12,15 @@ public class Frame extends JFrame implements ActionListener {
     private Panel panel = new Panel();
     Controller controller;
 
-    private static final String dokumentacjaApp = "Created by (A+V)*L";
-    private static final String instrukcjaApp = "1.Uruchomic\n"+"2.Dodqc dane";
+    private static final String dokumentacjaApp = "Ten program jest potrzebny dla operacje bazodanowych. Autorzy : V.L && A.L";
+    private static final String instrukcjaApp = "1.Uruchamiamy aplikacje\n"+
+                                                "2.Podajemy login oraz haslo\n"+
+                                                "3.Czekamy na pozwolenie logowanie\n"+
+                                                "4.Wybieramy w menu potrzebna tablice\n"+
+                                                "5.Oczekujemy na wyświetlania danych w panelu\n"+
+                                                "6.Wybieramy potrzebna operacje w Edycje\n"+
+                                                "7.Gdy jest potrzebne, podajemy dane w nowo utworzonym okienku\n"+
+                                                "8.Takze mozemy zrobic lub wczytac backup bazy\n";
 
     public Frame()
     {
