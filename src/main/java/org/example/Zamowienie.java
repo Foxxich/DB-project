@@ -7,13 +7,25 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-//Example of Low coupling and High cohesion class
+/**
+ * This class is used to create invoices.
+ * Also it is an example of Low coupling and High cohesion class.
+ */
 public class Zamowienie implements DataBaseObject {
+
+    /**
+     * clientID is the id of every client.
+     * invoiceID is the id of every invoice.
+     * state is the state of every invoice,
+     * it could be ('Oplacone','Dostarczone','Wyslane','Przygotowane','Zlozone','Odwolane').
+     * time is the time when the were provided different operations with this invoice,
+     * for example added new items to it or the state was changed.
+     * elements is the list of all elements of this invoice.
+     */
     private int clientID;
     private int invoiceID;
     private String state;
     private String time;
-
     private List<ElementZamowienia> elements;
 
     public Zamowienie(int invoiceID, String time, String state,int clientID) {
