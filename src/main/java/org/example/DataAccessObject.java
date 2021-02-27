@@ -18,99 +18,87 @@ public interface DataAccessObject {
 
     ArrayList<DataBaseObject> selectTowar();
 
-    /*
-     *  This method is used for inserting of products.
+    /**
+     * This method is used for inserting of products.
+     * @param towar is the item.
+     * @throws SQLException in case user cannot add new data to the database.
      */
     void addTowar(Towar towar) throws SQLException;
 
-    /*
-     *  This method is used for inserting of clients.
+    /**
+     * This method is used for inserting of clients.
+     * @param klient is the client.
+     * @throws SQLException in case user cannot add new data to the database.
      */
     void addKlient(Klient klient) throws SQLException;
 
-    /*
-     *  This method is used for inserting of invoices.
+    /**
+     * This method is used for inserting of invoices.
+     * @param zamowienie is the invoice.
+     * @throws SQLException in case user cannot add new data to the database.
      */
     void addZamowienie(Zamowienie zamowienie) throws SQLException;
 
-    /*
-     *  This method is used for inserting of elements of invoices.
+    /**
+     * This method is used for inserting of elements of invoices.
+     * @param elementZamowienia is the element of the invoice.
+     * @throws SQLException in case user cannot add new data to the database.
      */
     void addElement(ElementZamowienia elementZamowienia) throws SQLException;
 
-    /*
-     *  This method is used for updating of products.
+    /**
+     * This method is used for updating of products.
+     * @param towar is the item.
+     * @throws SQLException in case user cannot update data in the database.
      */
     void updateTowar(Towar towar) throws SQLException;
 
-    /*
-     *  This method is used for updating of clients.
+    /**
+     * This method is used for updating of clients.
+     * @param klient is the client.
+     * @throws SQLException in case user cannot update data in the database.
      */
     void updateKlient(Klient klient) throws SQLException;
-
+    
     /**
      * This method is used for updating of invoices.
-     * @param zamowienie
-     * @throws SQLException
+     * @param zamowienie is the invoice.
+     * @throws SQLException in case user cannot update data in the database.
      */
     void updateZamowienie(Zamowienie zamowienie) throws SQLException;
 
     /**
      * This method is used for updating of elements of invoices.
-     * @param elementZamowienia is the object which combines a few items in the given invoice.
-     * @throws SQLException
+     * @param elementZamowienia is the element of the invoice.
+     * @throws SQLException in case user cannot update data in the database.
      */
     void updateElement(ElementZamowienia elementZamowienia) throws SQLException;
 
     /**
-     * This method is used for getting all invoices with given id of client.
-     * @param klient is the object client.
-     */
-    void returnZamowienia(Klient klient);
-
-    /**
-     * This method is used for getting all invoice elements with given id of invoice.
-     * @param zamowienie is the object invoice.
-     */
-    void returnElementyZamowienia(Zamowienie zamowienie);
-
-    /**
-     * This method is used for getting all invoice elements with given discount.
-     * @param elementZamowienia is the object which combines a few items in the given invoice.
-     */
-    void returnElementyZeZnizka(ElementZamowienia elementZamowienia);
-
-    /**
-     * This method is used for getting all invoices with given id of item.
-     * @param towar is the object item.
-     */
-    void returnZamowieniaZTowarem(Towar towar);
-
-    /**
      * This method is used to delete the client in database, depending on the client id.
      * @param klientID is the id of client.
-     * @throws SQLException
+     * @throws SQLException in case user cannot delete data in the database.
      */
     void deleteKlient(int klientID) throws SQLException;
 
     /**
      * This method is used to delete the invoice in database, depending on the invoice id.
      * @param zamowienieID is the id of invoice.
-     * @throws SQLException
+     * @throws SQLException in case user cannot delete data in the database.
      */
     void deleteZamowienie(int zamowienieID) throws SQLException;
 
     /**
      * This method is used to delete elements of the invoice in database, depending on the elements id.
      * @param elementZamowieniaID is the id of elements of the invoice.
-     * @throws SQLException
+     * @throws SQLException in case user cannot delete data in the database.
      */
     void deleteElementZamowienia(int elementZamowieniaID) throws SQLException;
 
     /**
      * This method is used to delete item in database, depending on the item id.
      * @param towarID is the id of item.
-     * @throws SQLException
+     * @throws SQLException in case user cannot delete data in the database.
      */
     void deleteTowar(int towarID) throws SQLException;
 

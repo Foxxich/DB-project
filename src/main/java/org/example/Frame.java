@@ -7,12 +7,20 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * This class is used to create JFrame with embedded functions and parameters.
+ */
 public class Frame extends JFrame implements ActionListener {
 
+    /**
+     * panel is JPanel with table of information from the database.
+     * dokumentacjaApp is used as documentation of this application.
+     * instrukcjaApp is used as instruction of this application.
+     */
     private Panel panel = new Panel();
     Controller controller;
 
-    private static final String dokumentacjaApp = "Ten program jest potrzebny dla operacje bazodanowych. Autorzy : V.L && A.L";
+    private static final String dokumentacjaApp = "Ten program jest potrzebny dla operacje bazodanowych. Autorzy : V.L && M.B";
     private static final String instrukcjaApp = "1.Uruchamiamy aplikacje\n"+
                                                 "2.Podajemy login oraz haslo\n"+
                                                 "3.Czekamy na pozwolenie logowanie\n"+
@@ -22,6 +30,9 @@ public class Frame extends JFrame implements ActionListener {
                                                 "7.Gdy jest potrzebne, podajemy dane w nowo utworzonym okienku\n"+
                                                 "8.Takze mozemy zrobic lub wczytac backup bazy\n";
 
+    /**
+     * This method is used to create JFrame.
+     */
     public Frame()
     {
         super("DateBase");
@@ -148,15 +159,30 @@ public class Frame extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    /**
+     * This method is used to handle exceptions from database.
+     * @param exception is used when operation cannot be provided and
+     * user should get detailed information about the error.
+     */
     private void handleException(Exception exception) {
         JOptionPane.showMessageDialog(null,exception.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * This method is used to create ModifyFrame.
+     * @param map is a map of strings(headers) and objects(rows).
+     * @return map with values.
+     */
     public Map<String, Object> openModifyFrame(Map<String,Object> map) {
         ModifyFrame modifyFrame = new ModifyFrame(map, this);
         return modifyFrame.showDialog();
     }
 
+    /**
+     * This method is implemented from ActionListener to check
+     * if there were provided any operations on the panel.
+     * @param e is ActionEvent.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 

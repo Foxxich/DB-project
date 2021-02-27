@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -15,9 +14,9 @@ public class Towar implements DataBaseObject {
      * ean is European Article Number.
      * name is the name of item.
      * producer is the company/person that produced chosen item.
-     * warranty is the time of guarantee.
-     * itemId is an unique id for each item.
-     * availability  is a number of available items.
+     * warranty is used for details about the guarantee.
+     * itemId is an unique id of each item.
+     * availability is a number of available items.
      */
     private String ean;
     private String name;
@@ -29,12 +28,12 @@ public class Towar implements DataBaseObject {
     /**
      * This method is used to get the ean, name, producer,
      * time of warranty, id of item and the number of available items.
-     * @param itemId
-     * @param name
-     * @param ean
-     * @param producer
-     * @param warranty
-     * @param availability
+     * @param itemId is an id of each item.
+     * @param name is the name of item.
+     * @param ean is European Article Number.
+     * @param producer is the company/person that produced chosen item.
+     * @param warranty is used for details about the guarantee.
+     * @param availability is a number of available items.
      */
     public Towar(int itemId, String name, String ean, String producer, String warranty, int availability) {
         this.itemId = itemId;

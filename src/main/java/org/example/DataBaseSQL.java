@@ -1,9 +1,7 @@
 package org.example;
 
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class DataBaseSQL implements DataAccessObject
 //implements DataAccessObject
@@ -31,11 +29,10 @@ public class DataBaseSQL implements DataAccessObject
     public boolean returnHaslo() {
         try (
                 Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{ ? = call returnHaslo(?,?)}");
+                CallableStatement statement = conn.prepareCall("{ ? = call returnHaslo(?)}");
         ) {
             statement.registerOutParameter(1,Types.VARCHAR);
             statement.setString(2, password);
-            statement.setString(3, user);
             statement.execute();
             if(statement.getString(1) != null) {
                 return true;
@@ -327,62 +324,6 @@ public class DataBaseSQL implements DataAccessObject
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw ex;
-        }
-    }
-
-    @Override
-    public void returnZamowienia(Klient klient) {
-        try (
-                Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{ ? = call returnZamowienia(?)}");
-        ) {
-            statement.registerOutParameter(1,Types.VARCHAR);
-            statement.setInt(2, klient.getClientID());
-            statement.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void returnElementyZamowienia(Zamowienie zamowienie) {
-        try (
-                Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{ ? = call returnElementyZamowienia(?)}");
-        ) {
-            statement.registerOutParameter(1,Types.VARCHAR);
-            statement.setInt(2, zamowienie.getInvoiceID());
-            statement.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void returnElementyZeZnizka(ElementZamowienia elementZamowienia) {
-        try (
-                Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{ ? = call returnElementyZeZnizka(?)}");
-        ) {
-            statement.registerOutParameter(1,Types.VARCHAR);
-            statement.setInt(2, elementZamowienia.getDiscount());
-            statement.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void returnZamowieniaZTowarem(Towar towar) {
-        try (
-                Connection conn = DriverManager.getConnection(dbURL, user, password);
-                CallableStatement statement = conn.prepareCall("{ ? = call returnZamowieniaZTowarem(?)}");
-        ) {
-            statement.registerOutParameter(1,Types.VARCHAR);
-            statement.setInt(2, towar.getItemId());
-            statement.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
     }
 

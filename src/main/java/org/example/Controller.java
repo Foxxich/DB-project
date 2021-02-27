@@ -4,46 +4,91 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * This class is used for Low coupling and High cohesion.
+ */
 public class Controller {
+
+    /**
+     * dataBaseObjects is array list of headers and values.
+     * dataAccessObject is used to get data from the database.
+     */
     ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
     DataAccessObject dataAccessObject = new DataBaseSQL();
 
+    /**
+     * This method is used to get dataBaseObjects.
+     * @return dataBaseObjects.
+     */
     public ArrayList<DataBaseObject> getDataBaseObjects() {
         return dataBaseObjects;
     }
 
-    public void setDataBaseObjects(ArrayList<DataBaseObject> dataBaseObjects) {
-        this.dataBaseObjects = dataBaseObjects;
-    }
-
+    /**
+     * This method is used to log to database.
+     * @param login is a user's login which is used to connection to database.
+     * @param password is a user's password which is used to connection to database.
+     * @return true if the login and password are correct and it is possible to
+     * connect to the database. In other case, false.
+     */
     public boolean logToDatabase(String login, String password) {
         return dataAccessObject.checkUser(login, password);
     }
 
+    /**
+     * This method is used to check existence of the account in the database.
+     * @return true if there exists account with given login and MD-5 password.
+     * In the other case, false.
+     */
     public boolean checkPass() {
         return dataAccessObject.returnHaslo();
     }
 
+    /**
+     * This method is used to add the data from Klient table
+     * to the array list of dataBaseObjects.
+     * @return selected data from Klient table.
+     */
     public ArrayList<DataBaseObject> selectKlient() {
         dataBaseObjects = dataAccessObject.selectKlient();
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used to add the data from Zamowienia table
+     * to the array list of dataBaseObjects.
+     * @return selected data from Zamowienia table.
+     */
     public ArrayList<DataBaseObject> selectZamowienie() {
         dataBaseObjects = dataAccessObject.selectZamowienie();
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used to add the data from ElementZamowienia table
+     * to the array list of dataBaseObjects.
+     * @return selected data from ElementZamowienia table.
+     */
     public ArrayList<DataBaseObject> selectElementZamowienia() {
         dataBaseObjects = dataAccessObject.selectElementZamowienia();
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used to add the data from Towar table
+     * to the array list of dataBaseObjects.
+     * @return selected data from Towar table.
+     */
     public ArrayList<DataBaseObject> selectTowar() {
         dataBaseObjects = dataAccessObject.selectTowar();
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used refresh table depending on the 0 element of the dataBaseObjects.
+     * @return different types of dataBaseObjects depending on instance of object.
+     * In other case, null.
+     */
     public ArrayList<DataBaseObject> refreshTable() {
         if(dataBaseObjects.get(0) instanceof Klient) {
             return dataAccessObject.selectKlient();
@@ -57,6 +102,11 @@ public class Controller {
         return null;
     }
 
+    /**
+     * This method is used to check if it is possible to add/modify row(object).
+     * @param map is the map of headers and values.
+     * @throws SQLException
+     */
     public void addOrModifyDataBaseObject(Map<String, Object> map) throws SQLException {
         if(dataBaseObjects.get(0) instanceof Klient) {
             Klient klient = new Klient(map);
@@ -97,6 +147,11 @@ public class Controller {
         }
     }
 
+    /**
+     * This method is used to check if it is possible to delete row(object).
+     * @param objectID is the unique id of every object in given table.
+     * @throws SQLException
+     */
     public void deleteObject(int objectID) throws SQLException {
         if(dataBaseObjects.get(0) instanceof Klient) {
             dataAccessObject.deleteKlient(objectID);
@@ -109,6 +164,12 @@ public class Controller {
         }
     }
 
+    /**
+     * This method is used get every object depending on the id.
+     * @param id is the unique id of every object in given table.
+     * @return dataBaseObject if dataBaseObject id is equal to id.
+     * In other case, null.
+     */
     public DataBaseObject getObjectById(int id) {
         for(DataBaseObject dataBaseObject : dataBaseObjects) {
             if(dataBaseObject.getID() == id) {

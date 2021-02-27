@@ -1,8 +1,6 @@
 package org.example;
 
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,14 +52,6 @@ public class Zamowienie implements DataBaseObject {
     }
 
     /**
-     * This method is used to set the id of the invoice.
-     * @param invoiceID is id of invoice.
-     */
-    public void setInvoiceID(int invoiceID) {
-        this.invoiceID = invoiceID;
-    }
-
-    /**
      * This method is used to get the id of client.
      * @return the client id.
      */
@@ -83,14 +73,6 @@ public class Zamowienie implements DataBaseObject {
      */
     public String getInvoiceState() {
         return state;
-    }
-
-    /**
-     * This method is used to get the time when there were any changes of invoice.
-     * @return the time of any changes with invoice.
-     */
-    public String getInvoiceTime() {
-        return time;
     }
 
     /**

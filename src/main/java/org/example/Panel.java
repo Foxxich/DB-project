@@ -60,7 +60,6 @@ public class Panel extends JPanel {
         jTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane = new JScrollPane(jTable);
         jScrollPane.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()));
-       //this.add(jScrollPane);
         add(jScrollPane, BorderLayout.CENTER);
         validate();
         repaint();

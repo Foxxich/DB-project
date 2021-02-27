@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -55,14 +54,6 @@ public class Klient implements DataBaseObject {
      */
     public Klient(Map<String, Object> map) {
         this.setFromMap(map);
-    }
-
-    /**
-     *  This method is used to set the id of the client.
-     * @param clientID is id of client.
-     */
-    public void setClientID(int clientID) {
-        this.clientID = clientID;
     }
 
     /**

@@ -5,13 +5,30 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This class is used to create JFrame with embedded functions and parameters.
+ * Also it extends JDialog.
+ */
 public class ModifyFrame extends JDialog {
+    /**
+     * ok is button to "agree" with providing any changes.
+     * cancel is button to "disagree" with providing any changes.
+     * panel is JPanel with text fields for input.
+     * valueMap is a map of headers and objects(row with data).
+     * inputMap is used for input from user.
+     */
     JButton ok,cancel;
     JPanel panel;
 
     Map<String,Object> valueMap = null;
     Map<String, JTextField> inputMap;
 
+    /**
+     * This method is used to get map of headers and values, Frame parent.
+     * @param valueMap is a map with headers and objects.
+     * @param parent is used as a parent JFrame.
+     * @throws HeadlessException
+     */
     public ModifyFrame(Map<String, Object> valueMap, Frame parent) throws HeadlessException {
         super(parent,"Modify", true);
         this.setSize(250, valueMap.keySet().size() * 62);
@@ -50,10 +67,19 @@ public class ModifyFrame extends JDialog {
         setContentPane(panel);
     }
 
+    /**
+     *  This method is used to make valueMap equal to null.
+     *  Especially program executes it when user chooses "Cancel"
+     *  while providing date in a new frame.
+     */
     private void valueZero() {
         valueMap = null;
     }
 
+    /**
+     * This method is used to get data from text fields and denying
+     * possibility to use custom id.
+     */
     private void createForm() {
         Dimension preferredDimension = new Dimension(this.getWidth() - 30, 20);
         for(String key : valueMap.keySet()) {
@@ -77,6 +103,10 @@ public class ModifyFrame extends JDialog {
         }
     }
 
+    /**
+     * This method is used to show a dialog message when data is added/modified.
+     * @return valueMap.
+     */
     public Map<String, Object> showDialog() {
         setVisible(true);
         return valueMap;

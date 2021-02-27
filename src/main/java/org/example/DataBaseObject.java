@@ -2,10 +2,26 @@ package org.example;
 
 import java.util.Map;
 
+/**
+ * This interface is used for protected variation.
+ */
 public interface DataBaseObject {
-    public Object[] getAsObject();//zwraca caly obiekt w formie tablicy
-    public String[] getHeaders();//zwraca nazwy kolumn
-    public int getID();
-    public Map<String,Object> getAsMap();
-    public void setFromMap(Map<String,Object> map);
+
+    /**
+     * getAsObject is used to return the whole object as a table.
+     * getHeaders  is used to return the headers of a table.
+     * getID is used to get id of the object.
+     * getAsMap is a map of objects and headers.
+     * @return getAsObject,getHeaders,getID,getAsMap
+     */
+    Object[] getAsObject();//zwraca caly obiekt w formie tablicy
+    String[] getHeaders();//zwraca nazwy kolumn
+    int getID();
+    Map<String,Object> getAsMap();
+
+    /**
+     * This method is used to set table using given headers and objects.
+     * @param map is a map of headers and objects.
+     */
+    void setFromMap(Map<String,Object> map);
 }
