@@ -33,7 +33,7 @@ public class Frame extends JFrame implements ActionListener {
                 this.dispose();
                 return;
             }
-            if(controller.logToDatabase(user,password)) {
+            if(controller.logToDatabase(user,password) && controller.checkPass()) {
                 JOptionPane.showMessageDialog(this,"U r logged to database");
                 break;
             } else {

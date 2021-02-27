@@ -84,4 +84,6 @@ public interface DataAccessObject {
     void deleteElementZamowienia(int elementZamowieniaID) throws SQLException;
 
     void deleteTowar(int towarID) throws SQLException;
+
+    boolean returnHaslo();
 }

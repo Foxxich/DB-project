@@ -20,6 +20,10 @@ public class Controller {
         return dataAccessObject.checkUser(login, password);
     }
 
+    public boolean checkPass() {
+        return dataAccessObject.returnHaslo();
+    }
+
     public ArrayList<DataBaseObject> selectKlient() {
         dataBaseObjects = dataAccessObject.selectKlient();
         return dataBaseObjects;

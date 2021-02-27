@@ -27,6 +27,25 @@ public class DataBaseSQL implements DataAccessObject
         return false;
     }
 
+    @Override
+    public boolean returnHaslo() {
+        try (
+                Connection conn = DriverManager.getConnection(dbURL, user, password);
+                CallableStatement statement = conn.prepareCall("{ ? = call returnHaslo(?,?)}");
+        ) {
+            statement.registerOutParameter(1,Types.VARCHAR);
+            statement.setString(2, password);
+            statement.setString(3, user);
+            statement.execute();
+            if(statement.getString(1) != null) {
+                return true;
+            }
+            return false;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return true;
+    }
 
     @Override
     public ArrayList<DataBaseObject> selectKlient() {
