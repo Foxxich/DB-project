@@ -8,14 +8,37 @@ import java.util.ArrayList;
  */
 public interface DataAccessObject {
 
+    /**
+     * This method is used if the user can get access to the database.
+     * @param user is user's login.
+     * @param password is user's password.
+     * @return true if user's login and password are correct and he is allowed to connect to the database.
+     * In other case, false.
+     */
     boolean checkUser(String user, String password);
 
+    /**
+     * This method is used to get clients as DataBaseObject.
+     * @return DataBaseObject.
+     */
     ArrayList<DataBaseObject> selectKlient();
 
+    /**
+     * This method is used to get invoice as DataBaseObject.
+     * @return DataBaseObject.
+     */
     ArrayList<DataBaseObject> selectZamowienie();
 
+    /**
+     * This method is used to get invoice element as DataBaseObject.
+     * @return DataBaseObject.
+     */
     ArrayList<DataBaseObject> selectElementZamowienia();
 
+    /**
+     * This method is used to get item as DataBaseObject.
+     * @return DataBaseObject.
+     */
     ArrayList<DataBaseObject> selectTowar();
 
     /**
@@ -103,8 +126,8 @@ public interface DataAccessObject {
     void deleteTowar(int towarID) throws SQLException;
 
     /**
-     * This method is used to check up the existence of given user in database.
-     * @return true it the user and his password in MD5 exists in database. In other cases, false.
+     * This method is used to check up the existence of given user and his password in special table of database.
+     * @return true if the user and his password in MD5 exists in database. In other cases, false.
      */
     boolean returnHaslo();
 }

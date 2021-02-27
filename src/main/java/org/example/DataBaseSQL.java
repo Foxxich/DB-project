@@ -3,13 +3,28 @@ package org.example;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * This class is used to implement methods from the DataAccessObject.
+ * It is an example of High Cohesion and Low Coupling.
+ */
 public class DataBaseSQL implements DataAccessObject
-//implements DataAccessObject
 {
+    /**
+     * dbURL is the url for the database.
+     * user is used as login to database.
+     * password is used as password to database.
+     */
     private static final String dbURL = "jdbc:mariadb://localhost/zakupy";
     private String user;
     private String password;
 
+    /**
+     * This method is used if the user can get access to the database.
+     * @param user is user's login.
+     * @param password is user's password.
+     * @return true if user's login and password are correct and he is allowed to connect to the database.
+     * In other case, false.
+     */
     @Override
     public boolean checkUser(String user, String password) {
         try {
@@ -25,6 +40,10 @@ public class DataBaseSQL implements DataAccessObject
         return false;
     }
 
+    /**
+     * This method is used to check up the existence of given user in database.
+     * @return true if the user and his password in MD5 exists in database. In other cases, false.
+     */
     @Override
     public boolean returnHaslo() {
         try (
@@ -44,6 +63,10 @@ public class DataBaseSQL implements DataAccessObject
         return true;
     }
 
+    /**
+     * This method is used to get clients as DataBaseObject.
+     * @return DataBaseObject.
+     */
     @Override
     public ArrayList<DataBaseObject> selectKlient() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
@@ -72,6 +95,10 @@ public class DataBaseSQL implements DataAccessObject
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used to get invoice as DataBaseObject.
+     * @return DataBaseObjects.
+     */
     @Override
     public ArrayList<DataBaseObject> selectZamowienie() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
@@ -103,6 +130,10 @@ public class DataBaseSQL implements DataAccessObject
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used to get the invoice element depending on the id of invoice as DataBaseObject.
+     * @return DataBaseObjects.
+     */
     private ArrayList<ElementZamowienia> selectElementZamowieniaByZamowieniaId(int idZamowienia) {
         ArrayList<ElementZamowienia> dataBaseObjects = new ArrayList<>();
         try
@@ -128,7 +159,10 @@ public class DataBaseSQL implements DataAccessObject
         return dataBaseObjects;
     }
 
-
+    /**
+     * This method is used to get invoice element as DataBaseObject.
+     * @return DataBaseObjects.
+     */
     @Override
     public ArrayList<DataBaseObject> selectElementZamowienia() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
@@ -156,6 +190,10 @@ public class DataBaseSQL implements DataAccessObject
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used to get item as DataBaseObject.
+     * @return DataBaseObjects.
+     */
     @Override
     public ArrayList<DataBaseObject> selectTowar() {
         ArrayList<DataBaseObject> dataBaseObjects = new ArrayList<>();
@@ -183,6 +221,11 @@ public class DataBaseSQL implements DataAccessObject
         return dataBaseObjects;
     }
 
+    /**
+     * This method is used for inserting of products.
+     * @param towar is the item.
+     * @throws SQLException in case user cannot add new data to the database.
+     */
     @Override
     public void addTowar(Towar towar) throws SQLException {
         try (
@@ -201,6 +244,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for inserting of clients.
+     * @param klient is the client.
+     * @throws SQLException in case user cannot add new data to the database.
+     */
     @Override
     public void addKlient(Klient klient) throws SQLException {
         try (
@@ -220,6 +268,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for inserting of invoices.
+     * @param zamowienie is the invoice.
+     * @throws SQLException in case user cannot add new data to the database.
+     */
     @Override
     public void addZamowienie(Zamowienie zamowienie) throws SQLException {
         try (
@@ -235,6 +288,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for inserting of elements of invoices.
+     * @param elementZamowienia is the element of the invoice.
+     * @throws SQLException in case user cannot add new data to the database.
+     */
     @Override
     public void addElement(ElementZamowienia elementZamowienia) throws SQLException {
         try (
@@ -253,6 +311,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for updating of products.
+     * @param towar is the item.
+     * @throws SQLException in case user cannot update data in the database.
+     */
     @Override
     public void updateTowar(Towar towar) throws SQLException {
         try (
@@ -272,6 +335,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for updating of clients.
+     * @param klient is the client.
+     * @throws SQLException in case user cannot update data in the database.
+     */
     @Override
     public void updateKlient(Klient klient) throws SQLException {
         try (
@@ -292,6 +360,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for updating of invoices.
+     * @param zamowienie is the invoice.
+     * @throws SQLException in case user cannot update data in the database.
+     */
     @Override
     public void updateZamowienie(Zamowienie zamowienie) throws SQLException {
         try (
@@ -308,6 +381,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used for updating of elements of invoices.
+     * @param elementZamowienia is the element of the invoice.
+     * @throws SQLException in case user cannot update data in the database.
+     */
     @Override
     public void updateElement(ElementZamowienia elementZamowienia) throws SQLException {
         try (
@@ -327,6 +405,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used to delete the client in database, depending on the client id.
+     * @param klientID is the id of client.
+     * @throws SQLException in case user cannot delete data in the database.
+     */
     @Override
     public void deleteKlient(int klientID) throws SQLException {
         try {
@@ -340,6 +423,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used to delete the invoice in database, depending on the invoice id.
+     * @param zamowienieID is the id of invoice.
+     * @throws SQLException in case user cannot delete data in the database.
+     */
     @Override
     public void deleteZamowienie(int zamowienieID) throws SQLException {
         try {
@@ -353,6 +441,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used to delete elements of the invoice in database, depending on the elements id.
+     * @param elementZamowieniaID is the id of elements of the invoice.
+     * @throws SQLException in case user cannot delete data in the database.
+     */
     @Override
     public void deleteElementZamowienia(int elementZamowieniaID) throws SQLException {
         try {
@@ -366,6 +459,11 @@ public class DataBaseSQL implements DataAccessObject
         }
     }
 
+    /**
+     * This method is used to delete item in database, depending on the item id.
+     * @param towarID is the id of item.
+     * @throws SQLException in case user cannot delete data in the database.
+     */
     @Override
     public void deleteTowar(int towarID) throws SQLException {
         try {
