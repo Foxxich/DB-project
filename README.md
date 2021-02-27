@@ -13,6 +13,6 @@ In the case all parameters are okay, then every user has its own possibilities f
 modifying the database. For example, just Admin has possibility to delete data from tables.
 On the other hand, counter cannot do anything like this.<br /> 
 For better understanding, there is documentation of this application, instruction for user and details about it.
-![alt text](https://github.com/Foxxich/dataBaseImproves/blob/master/src/Screens/Application.png)
+![Usage](https://github.com/Foxxich/dataBaseImproves/blob/master/src/Screens/Application.png)
 
   
